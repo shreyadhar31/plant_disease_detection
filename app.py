@@ -79,20 +79,23 @@ class_names = [
 # ---------------------------
 uploaded_file = st.file_uploader("📸 Upload Leaf Image", type=["jpg", "jpeg", "png"])
 
-if uploaded_file:
-    img = Image.open(uploaded_file).convert("RGB")
-st.image(img, caption="Uploaded Image", use_column_width=True)
+if uploaded_file is not None:
 
-st.markdown("### 🔄 Processing Image…")
-with st.spinner("AI is analyzing the leaf. Please wait..."):
+    img = Image.open(uploaded_file)
+    img = img.convert("RGB")
 
-    img = image.resize((224, 224))
-    img_array = np.array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
+    st.image(img, caption="Uploaded Image", use_column_width=True)
 
-    prediction = model.predict(img_array)
-    class_index = np.argmax(prediction)
-    confidence = np.max(prediction) * 100
+    st.markdown("### 🛠 Processing Image...")
+
+    with st.spinner("AI is analyzing the image..."):
+        img_resized = img.resize((224, 224))
+        img_array = np.array(img_resized) / 255.0
+        img_array = np.expand_dims(img_array, axis=0)
+
+        prediction = model.predict(img_array)
+        class_index = np.argmax(prediction)
+        confidence = np.max(prediction)
 
 
     # ---------------------------
