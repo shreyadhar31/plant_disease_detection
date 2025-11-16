@@ -95,7 +95,7 @@ if uploaded_file is not None:
 
         prediction = model.predict(img_array)
         class_index = np.argmax(prediction)
-        confidence = np.max(prediction)
+        confidence = np.max(prediction) * 100
 
 
     # ---------------------------
